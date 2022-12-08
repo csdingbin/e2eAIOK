@@ -81,10 +81,7 @@ class DeSearchSpaceXXBL(object):
                 student_sublayers_list = cls._get_select_student_sublayers_list(sub_layers=the_block.sub_layers)
                 student_bottleneck_channels_list = cls._get_select_student_channels_list(the_block.bottleneck_channels)
                 for student_block_type in student_block_type_list:
-                    for student_out_channels, student_sublayers, student_bottleneck_channels in itertools.product(
-                            student_out_channels_list, student_sublayers_list, student_bottleneck_channels_list):
-
-                        # filter smallest possible channel for this block type
+                    for student_out_channels, student_sublayers, student_bottleneck_channels in itertools.product(student_out_channels_list, student_sublayers_list, student_bottleneck_channels_list):
                         min_possible_channels = cls.__block_type_round_channels_base_dict__[student_block_type]
                         channel_round_base = cls.__block_type_round_channels_base_dict__[student_block_type]
                         student_out_channels = global_utils.smart_round(student_out_channels, channel_round_base)
@@ -100,7 +97,7 @@ class DeSearchSpaceXXBL(object):
                             student_sublayers)
                         student_blocks_list.append(tmp_block_str)
                     pass
-                    student_blocks_list = list(set(student_blocks_list))
+                    student_blocks_list = list(dict.fromkeys(student_blocks_list))
                     assert len(student_blocks_list) >= 1
                     student_blocks_list_list.append(student_blocks_list)
                 pass
@@ -214,7 +211,7 @@ class DeSearchSpaceIDWEXKX:
                             student_sublayers)
                         student_blocks_list.append(tmp_block_str)
                     pass
-                    student_blocks_list = list(set(student_blocks_list))
+                    student_blocks_list = list(dict.fromkeys(student_blocks_list))
                     assert len(student_blocks_list) >= 1
                     student_blocks_list_list.append(student_blocks_list)
                 pass

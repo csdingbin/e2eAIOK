@@ -1,7 +1,5 @@
-
-
 import os, sys, time
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import torch
 from torch import nn
 import numpy as np
@@ -11,11 +9,12 @@ import torch
 
 from scores.basic_utils import *
 from scores.transformer_proxy import do_compute_nas_score_transformer
+from scores.de_score import do_compute_nas_score_prev
 
 def do_compute_nas_score_cnn(model_type, model, resolution, batch_size, mixup_gamma, expressivity_weight=0, complexity_weight=0, diversity_weight=0, saliency_weight=0, latency_weight=0):
     disversity_score = 0
     latency = 0
-
+    torch.manual_seed(12345)
     dtype = torch.float32
     network_weight_gaussian_init(model)
     with torch.no_grad():

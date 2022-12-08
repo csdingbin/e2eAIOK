@@ -3,7 +3,8 @@ from cv.utils.cnn import cnn_mutation_random_func, cnn_crossover_random_func
 from cv.utils.vit import vit_mutation_random_func, vit_crossover_random_func
 from nlp.utils import bert_mutation_random_func, bert_crossover_random_func
 from asr.utils.asr_nas import asr_mutation_random_func, asr_crossover_random_func
-
+import time
+import random
 class EvolutionarySearchEngine(BaseSearchEngine):
 
     def __init__(self, params=None, super_net=None, search_space=None):
@@ -35,7 +36,7 @@ class EvolutionarySearchEngine(BaseSearchEngine):
         elif self.params.domain == "asr":
             return asr_mutation_random_func(self.params.m_prob, self.params.s_prob, self.search_space, self.top_candidates)
         elif self.params.domain == "cnn":
-            return cnn_mutation_random_func(self.candidates, self.super_net, self.search_space, self.params.num_classes)
+            return cnn_mutation_random_func(self.candidates, self.super_net, self.search_space, self.params.num_classes, self.params.plainnet_struct)
         else:
             raise RuntimeError(f"Domain {self.params.domain} is not supported")
 
@@ -123,13 +124,17 @@ class EvolutionarySearchEngine(BaseSearchEngine):
     Unified API for EvolutionarySearchEngine
     '''
     def search(self):
+        random.seed(12345)
         for epoch in range(self.params.max_epochs):
+            loop_start = time.time()
             self.logger.info('epoch = {}'.format(epoch))
             self.get_populate()
             self.update_population_pool()
             mutation = self.get_mutation()
             crossover = self.get_crossover()
             self.candidates = mutation + crossover
+            loop_end = time.time()
+            print(F"This loop time:{loop_end - loop_start}")
         self.update_population_pool()
         with open("best_model_structure.txt", 'w') as f:
             f.write(str(self.top_candidates[0]))

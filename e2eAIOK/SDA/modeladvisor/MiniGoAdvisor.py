@@ -22,8 +22,9 @@ class MiniGoAdvisor(BaseModelAdvisor):
         self.target=f"{settings['data_path']}/target/target.minigo"
 
     def update_metrics(self):
-        with open("result/metric.txt", "r") as f:
-            self.winrate = float(f.read())
+        metric_file = open("result/metric.txt", "r")
+        self.winrate = float(metric_file.read())
+        metric_file.close()
         metrics = []
         metrics.append({'name': 'winrate', 'value': self.winrate})
         metrics.append({'name': 'training_time', 'value': self.training_time})

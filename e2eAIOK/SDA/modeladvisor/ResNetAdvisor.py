@@ -87,8 +87,9 @@ class ResNetAdvisor(BaseModelAdvisor):
         else:
             self.dist_launch(args)
         self.training_time = time.time() - start_time
-        with open("/home/vmagent/app/e2eaiok/modelzoo/resnet/mlperf_resnet/metric.txt",'r') as f:
-            lines = f.readlines()
+        file1 = open("/home/vmagent/app/e2eaiok/modelzoo/resnet/mlperf_resnet/metric.txt",'r')
+        lines = file1.readlines()
+        file1.close()
         self.mean_accuracy = float(lines[-1])
         metrics = self.update_metrics()
         model_path = self.model_saved_path

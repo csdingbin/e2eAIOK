@@ -1,1 +1,1 @@
-__all__ = ['basic_utils','compute_de_score','transformer_proxy']
+__all__ = ['basic_utils','compute_de_score','transformer_proxy', 'de_score']
